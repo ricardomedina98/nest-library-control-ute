@@ -1,14 +1,19 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
-import { UserDetails } from "./user.details.entity";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+import { UserDetailsEntity } from "./user.details.entity";
+import * as bcrypt from 'bcryptjs';
+
 
 @Entity('users')
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column({type: 'varchar', unique: true, nullable: false})
+    @Column({type: 'varchar', nullable: false})
     email: string;
+
+    @Column({type: 'varchar', nullable: false})
+    username: string;
 
     @Column({type: 'varchar', nullable: false})
     password: string;
@@ -16,17 +21,23 @@ export class User extends BaseEntity {
     @Column({type: 'varchar', default: 'ACTIVE', length: 8})
     status: string;
 
-    @Column({type: 'timestamp', name: 'created_at'})
-    createdAt: Date;
+    @CreateDateColumn({type: 'timestamp', name: 'created_at'})
+    createdAt?: Date;
 
-    @Column({type: 'timestamp', name: 'updated_at'})
-    updatedAt: Date;
+    @UpdateDateColumn({type: 'timestamp', name: 'updated_at'})
+    updatedAt?: Date;
 
-    @OneToOne(type => UserDetails, {
+    @OneToOne(type => UserDetailsEntity, {
         cascade: true, 
         nullable: false, 
         eager: true,
     })
     @JoinColumn({name: 'id_details'})
-    details: UserDetails;
+    details: UserDetailsEntity;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword() {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
 }
