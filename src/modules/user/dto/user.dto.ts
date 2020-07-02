@@ -1,15 +1,24 @@
-import { IsNotEmpty, IsEmail } from "class-validator";
-import { UserDetails } from "../user.details.entity";
+import { IsNotEmpty, IsEmail, IsString, IsDate } from "class-validator"
+import { UserDetailsDto } from "./user-details.dto";
 
 export class UserDto {
     @IsNotEmpty()
     id: number;
 
     @IsNotEmpty()
+    username: string;
+
+    @IsNotEmpty()
+    @IsEmail()
     email: string;
 
     @IsNotEmpty()
-    detials: UserDetails;
+    deitals: UserDetailsDto
 
+    @IsDate()
+    @IsNotEmpty()
+    createdAt: Date
 
+    @IsDate()
+    updatedAt: Date
 }
