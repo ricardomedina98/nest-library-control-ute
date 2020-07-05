@@ -4,12 +4,12 @@
 
 ### Create a file .env
 ```sh
-    PORT=4000
-    HOST=localhost
-    USERNAME=root
-    PASSWORD=test
-    PORTDATABASE=3306
-    DATABASE=library_control_ute
+    APP_PORT=4000
+    MYSQL_HOST=localhost
+    MYSQL_USERNAME=root
+    MYSQL_PASSWORD=test
+    MYSQL_PORT=3306
+    MYSQL_DATABASE=library_control_ute
 ```
 
 ### Create file ormconfig.json
