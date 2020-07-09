@@ -6,7 +6,7 @@ import { IJwtPayload } from "./jwt-payload.interface";
 import { toUserDto } from "src/shared/mapper";
 import { UserDto } from "../user/dto/user.dto";
 import { SignInDto } from "./dto/signin.dto";
-import { UserStatus } from "../user/user-status.keys";
+import { UserStatus } from "../user/user-status.enum";
 import { UnauthorizedException } from "@nestjs/common";
 import { compare } from "bcryptjs";
 
@@ -16,14 +16,13 @@ export class AuthRepository extends Repository<UserEntity> {
 
     async findByPayload({ id }: IJwtPayload): Promise<UserDto> {
 
-        const userDb = await this.findOne({
+        const user = await this.findOne(id, {
             where: {
-                id,
                 status: UserStatus.ACTIVE
             }
         });
 
-        return toUserDto(userDb);
+        return toUserDto(user);
     }
 
     async findBySigIn({ username, password }: SignInDto) {

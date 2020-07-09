@@ -5,5 +5,5 @@ export interface IJwtPayload {
     name: string;
     firstName: string;
     secondName: string;
-    iat?: Date;
+    role: string;
 }

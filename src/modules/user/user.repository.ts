@@ -1,7 +1,6 @@
 import { Repository, EntityRepository } from "typeorm";
 import { UserEntity } from "./user.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UserStatus } from "./user-status.keys";
+import { UserStatus } from "./user-status.enum";
 
 @EntityRepository(UserEntity)
 export class UserRepositry extends Repository<UserEntity> {
@@ -28,7 +27,7 @@ export class UserRepositry extends Repository<UserEntity> {
 
     async existUsernameAndEmail(username: string, email: string): Promise<UserEntity> {
         return await this.createQueryBuilder('user')
-        .where("(user.email = :email OR user.username = :username) AND user.status = :status", {
+        .where("user.email = :email OR user.username = :username AND user.status = :status", {
             email,
             username,
             status: UserStatus.ACTIVE

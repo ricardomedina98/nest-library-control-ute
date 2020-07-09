@@ -1,6 +1,8 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, ManyToOne } from "typeorm";
 import { UserDetailsEntity } from "./user.details.entity";
 import * as bcrypt from 'bcryptjs';
+import { UserStatus } from "./user-status.enum";
+import { RoleEntity } from "../role/role.entity";
 
 
 @Entity('users')
@@ -18,7 +20,7 @@ export class UserEntity extends BaseEntity {
     @Column({type: 'varchar', nullable: false})
     password: string;
 
-    @Column({type: 'varchar', default: 'ACTIVE', length: 8})
+    @Column({type: 'varchar', default: UserStatus.ACTIVE, length: 8})
     status: string;
 
     @CreateDateColumn({type: 'timestamp', name: 'created_at'})
@@ -34,6 +36,13 @@ export class UserEntity extends BaseEntity {
     })
     @JoinColumn({name: 'id_details'})
     details: UserDetailsEntity;
+
+    @ManyToOne(type => RoleEntity,{
+        nullable: false,
+        eager: true
+    })
+    @JoinColumn({name: 'id_role'})
+    role: RoleEntity
 
     @BeforeInsert()
     @BeforeUpdate()

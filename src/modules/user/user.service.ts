@@ -1,22 +1,25 @@
-import { Injectable, BadRequestException, NotFoundException, HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, HttpException, HttpStatus, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { UserRepositry } from './user.repository';
 import { InjectRepository, } from '@nestjs/typeorm';
-import { Equal } from "typeorm";
 import { UserEntity  } from './user.entity';
-import { UserStatus } from './user-status.keys';
+import { UserStatus } from './user-status.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { toUserDto } from 'src/shared/mapper';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { IJwtPayload } from '../auth/jwt-payload.interface';
-import { SignInDto } from '../auth/dto/signin.dto';
-import { compare } from 'bcryptjs';
+import { RoleRepositry } from '../role/role.repository';
+import { RoleType } from '../role/role-type.enum';
+import { RoleEntity } from '../role/role.entity';
+import { RoleStatus } from '../role/role-status.enum';
+
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(UserRepositry)
         private readonly _userRepository: UserRepositry,
+        @InjectRepository(RoleRepositry)
+        private readonly _roleRepository: RoleRepositry
     ) {}
 
     async getById(id: number): Promise<UserDto> {
@@ -51,15 +54,26 @@ export class UserService {
     async create(userDto: CreateUserDto): Promise<UserDto> {
         const { email, username, password, name, firstName, secondName } = userDto;
 
-        const userDb = await this._userRepository.existUsernameAndEmail(email, username);
+        const userDb = await this._userRepository.existUsernameAndEmail(username, email);
 
         if(userDb) {
-            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+            throw new ConflictException('User already exists');
+        }
+
+        const role: RoleEntity = await this._roleRepository.findOne({
+            where: {
+                name: userDto.role,
+                status: RoleStatus.ACTIVE
+            }
+        });
+
+        if(!role) {
+            throw new NotFoundException('Role does not exist');
         }
 
 
-        const user: UserEntity = await this._userRepository.create({
-            email, username, password, details: { name, firstName, secondName}
+        let user: UserEntity = this._userRepository.create({
+            email, username, password, details: { name, firstName, secondName}, role
         });
 
         await this._userRepository.save(user);
@@ -72,24 +86,39 @@ export class UserService {
 
         const { email, username, password, name, firstName, secondName } = userDto;
 
-        const existUsername: UserEntity = await this._userRepository.existUsernameExceptById(id, username);
-
-        if(existUsername) {
-            throw new HttpException("Username already exist", HttpStatus.CONFLICT);
-        }
-
-        const existEmail: UserEntity = await this._userRepository.existEmailExceptById(id, email);
-
-        if(existEmail) {
-            throw new HttpException("Email already exist", HttpStatus.CONFLICT);
-        }
-
         const existUser = await this._userRepository.findOne({
             where: {
                 id,
                 status: UserStatus.ACTIVE
             }
         });
+
+        if(!existUser) {
+            throw new BadRequestException('User does not exit');
+        }
+
+        const existUsername: UserEntity = await this._userRepository.existUsernameExceptById(id, username);
+
+        if(existUsername) {
+            throw new ConflictException("Username already exist");
+        }
+
+        const existEmail: UserEntity = await this._userRepository.existEmailExceptById(id, email);
+
+        if(existEmail) {
+            throw new ConflictException("Email already exist");
+        }
+
+        const role: RoleEntity = await this._roleRepository.findOne({
+            where: {
+                name: userDto.role,
+                status: RoleStatus.ACTIVE
+            }
+        });
+
+        if(!role) {
+            throw new NotFoundException('Role does not exist');
+        }
 
         const user = this._userRepository.merge(existUser, {
             email,
@@ -99,7 +128,8 @@ export class UserService {
                 name,
                 firstName,
                 secondName
-            }
+            },
+            role
         });
 
         await this._userRepository.save(user);
