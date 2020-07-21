@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsEmail, IsDate, IsString } from "class-validator"
 import { UserDetailsDto } from "./user-details.dto";
 import { RoleType } from "src/modules/role/role-type.enum";
-import { RoleDTO } from "src/modules/role/dto/role.dto";
+import { RoleDto } from "src/modules/role/dto/role.dto";
 
 export class UserDto {
     @IsNotEmpty()
@@ -15,15 +15,27 @@ export class UserDto {
     email: string;
 
     @IsNotEmpty()
-    deitals: UserDetailsDto
+    @IsString()
+    name: string;
+
+    @IsNotEmpty()
+    @IsString()
+    firstName: string;
+
+    @IsString()
+    secondName?: string;
+
+    @IsNotEmpty()
+    @IsString()
+    status?: string;
 
     @IsDate()
     @IsNotEmpty()
-    createdAt: Date
+    createdAt?: Date
 
     @IsDate()
-    updatedAt: Date
+    updatedAt?: Date
 
     @IsNotEmpty()
-    role: RoleDTO;
+    role?: string;
 }

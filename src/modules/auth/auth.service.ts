@@ -34,15 +34,15 @@ export class AuthService {
         return user;
     }
 
-    private async _createToken({ id, email, username, deitals, role}: UserDto) {
+    private async _createToken({ id, email, username, name, firstName, secondName, role}: UserDto) {
         const payload: IJwtPayload = {
             id, 
             email,
             username,
-            name: deitals.name,
-            firstName: deitals.firstName,
-            secondName: deitals.secondName,
-            role: role.name
+            name,
+            firstName,
+            secondName,
+            role
         }
         const token: string = await this._jwtService.sign(payload);
 

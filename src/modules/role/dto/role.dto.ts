@@ -1,10 +1,7 @@
-import { IsNotEmpty, IsString, IsDate } from "class-validator";
+import { IsNotEmpty, IsString, IsDate, IsArray } from "class-validator";
+import { UserDto } from "src/modules/user/dto/user.dto";
 
-export class RoleDTO {
-
-    constructor() {
-        this.name = this.name.toUpperCase();
-    }
+export class RoleDto {
 
     @IsNotEmpty()
     id_role: number;
@@ -19,12 +16,15 @@ export class RoleDTO {
 
     @IsNotEmpty()
     @IsString()
-    status: string;
+    status?: string;
 
     @IsDate()
     @IsNotEmpty()
-    createdAt: Date;
+    createdAt?: Date;
 
     @IsDate()
-    updatedAt: Date;
+    updatedAt?: Date;
+
+    @IsArray()
+    users?: UserDto[];
 }

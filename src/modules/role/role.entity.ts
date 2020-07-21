@@ -1,5 +1,6 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToMany, JoinColumn } from "typeorm";
 import { UserStatus } from "../user/user-status.enum";
+import { UserEntity } from "../user/user.entity";
 
 @Entity('roles')
 export class RoleEntity extends BaseEntity {
@@ -20,6 +21,10 @@ export class RoleEntity extends BaseEntity {
 
     @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
     updatedAt: Date;
+
+    @OneToMany(type => UserEntity, user => user.role)
+    @JoinColumn()
+    users: UserEntity[];
 
     @BeforeInsert()
     @BeforeUpdate()
