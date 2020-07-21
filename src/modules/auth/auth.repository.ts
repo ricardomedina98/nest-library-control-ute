@@ -37,6 +37,7 @@ export class AuthRepository extends Repository<UserEntity> {
             throw new UnauthorizedException('Invalid credentials');
         }
 
+
         const areEqual =  await compare(password, user.password);
 
         if(!areEqual) {

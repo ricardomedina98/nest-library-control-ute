@@ -1,12 +1,13 @@
 import { Injectable, BadRequestException, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleRepositry } from './role.repository';
-import { RoleDTO } from './dto/role.dto';
+import { RoleDto } from './dto/role.dto';
 import { RoleEntity } from './role.entity';
 import { RoleStatus } from './role-status.enum';
-import { toRoleDto } from 'src/shared/mapper';
+import { toRoleDto, toRolesDto, toRolesUsersDto } from 'src/shared/mapper';
 import { CreateRoleDTO } from './dto/create-role.dto';
 import { UpdateRoleDTO } from './dto/update-role.dto';
+import { UserStatus } from '../user/user-status.enum';
 
 @Injectable()
 export class RoleService {
@@ -17,7 +18,30 @@ export class RoleService {
 
     }
 
-    async getById(id: number): Promise<RoleDTO> {
+    async getAll(): Promise<RoleDto[]> {
+
+        const roles = await this._roleRepository.find({ where: { status: RoleStatus.ACTIVE } });
+
+        return toRolesDto(roles);
+        
+    }
+
+    async getRolesUsers() {
+
+        const roles = await this._roleRepository.createQueryBuilder("roles")
+        .leftJoinAndSelect("roles.users", "user", "roles.status = :statusr AND user.status = :statusu", {
+            statusr: RoleStatus.ACTIVE,
+            statusu: UserStatus.ACTIVE
+        })
+        .leftJoinAndSelect("user.details", "detials")
+        .getMany();
+
+        return toRolesUsersDto(roles);
+
+    }
+
+    async getById(id: number): Promise<RoleDto> {
+
         if(!id) {
             throw new BadRequestException('Id must be sent');
         }
@@ -35,11 +59,8 @@ export class RoleService {
         return toRoleDto(role);
     }
 
-    async getAll(): Promise<RoleDTO[]> {
-        return await this._roleRepository.find({ where: { status: RoleStatus.ACTIVE } });
-    }
-
     async create(createDto: CreateRoleDTO) {
+
         const { name, description } = createDto;
 
         const existRole = await this._roleRepository.findOne({
@@ -55,6 +76,7 @@ export class RoleService {
         this._roleRepository.save(role);
 
         return toRoleDto(role);
+
     }
 
     async update(id:number, updateDto: UpdateRoleDTO) {

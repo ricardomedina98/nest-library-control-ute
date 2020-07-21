@@ -1,8 +1,8 @@
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from 'src/config/config.module';
 import { ConfigService } from 'src/config/config.service';
-import { ConnectionOptions } from 'typeorm';
 import { Configuration } from 'src/config/config.keys';
+import { ConnectionOptions } from 'typeorm';
 
 export const databaseProviders = [
     TypeOrmModule.forRootAsync({

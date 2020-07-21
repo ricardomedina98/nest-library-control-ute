@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Post, Body, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post, Body, Put, UseGuards, UsePipes, ValidationPipe, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
@@ -9,6 +9,7 @@ import { Roles } from '../role/decorators/role.decorator';
 import { RoleType } from '../role/role-type.enum';
 
 @UseGuards(AuthGuard(), RoleGuard)
+@UsePipes(ValidationPipe)
 @Controller('users')
 export class UserController {
     constructor(
@@ -42,5 +43,11 @@ export class UserController {
         @Body() updateUserDto: UpdateUserDto
     ): Promise<UserDto> {
         return this._userService.update(id, updateUserDto);
+    }
+
+    @Delete(':id')
+    @Roles(RoleType.MASTER)
+    async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
+        return this._userService.delete(id);
     }
 }

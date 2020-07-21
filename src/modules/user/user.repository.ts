@@ -25,13 +25,4 @@ export class UserRepositry extends Repository<UserEntity> {
         .getOne();
     }
 
-    async existUsernameAndEmail(username: string, email: string): Promise<UserEntity> {
-        return await this.createQueryBuilder('user')
-        .where("user.email = :email OR user.username = :username AND user.status = :status", {
-            email,
-            username,
-            status: UserStatus.ACTIVE
-        })
-        .getOne();
-    }
 }
