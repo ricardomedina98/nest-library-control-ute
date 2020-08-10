@@ -1,6 +1,6 @@
 import { UserEntity } from "src/modules/user/user.entity";
 import { UserDto } from "src/modules/user/dto/user.dto";
-import { RoleEntity } from "src/modules/role/role.entity";
+import { RoleEntity } from "src/modules/role/entities/role.entity";
 import { RoleDto } from "src/modules/role/dto/role.dto";
 
 export const toUserDto = (data: UserEntity): UserDto => {
