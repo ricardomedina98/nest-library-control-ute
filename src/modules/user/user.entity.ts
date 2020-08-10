@@ -2,7 +2,7 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColum
 import { UserDetailsEntity } from "./user.details.entity";
 import * as bcrypt from 'bcryptjs';
 import { UserStatus } from "./user-status.enum";
-import { RoleEntity } from "../role/role.entity";
+import { RoleEntity } from "../role/entities/role.entity";
 
 
 @Entity('users')

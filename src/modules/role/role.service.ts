@@ -2,8 +2,8 @@ import { Injectable, BadRequestException, NotFoundException, ConflictException }
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleRepositry } from './role.repository';
 import { RoleDto } from './dto/role.dto';
-import { RoleEntity } from './role.entity';
-import { RoleStatus } from './role-status.enum';
+import { RoleEntity } from './entities/role.entity';
+import { RoleStatus } from './types/role-status.enum';
 import { toRoleDto, toRolesDto, toRolesUsersDto } from 'src/shared/mapper';
 import { CreateRoleDTO } from './dto/create-role.dto';
 import { UpdateRoleDTO } from './dto/update-role.dto';

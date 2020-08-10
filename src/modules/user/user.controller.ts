@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../role/guards/role.guard';
 import { Roles } from '../role/decorators/role.decorator';
-import { RoleType } from '../role/role-type.enum';
+import { RoleType } from '../role/types/role-type.enum';
 
 @UseGuards(AuthGuard(), RoleGuard)
 @UsePipes(ValidationPipe)

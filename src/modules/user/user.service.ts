@@ -8,9 +8,9 @@ import { toUserDto } from 'src/shared/mapper';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { RoleRepositry } from '../role/role.repository';
-import { RoleType } from '../role/role-type.enum';
-import { RoleEntity } from '../role/role.entity';
-import { RoleStatus } from '../role/role-status.enum';
+import { RoleType } from '../role/types/role-type.enum';
+import { RoleEntity } from '../role/entities/role.entity';
+import { RoleStatus } from '../role/types/role-status.enum';
 import { SignUpDto } from '../auth/dto/signup.dto';
 
 
@@ -185,7 +185,7 @@ export class UserService {
             throw new NotFoundException('User does not exist');
         }
 
-        const userDelete = await this._userRepository.merge(existUser, {
+        const userDelete = this._userRepository.merge(existUser, {
             status: UserStatus.INACTIVE
         });
 

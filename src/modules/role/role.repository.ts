@@ -1,7 +1,7 @@
 import { Repository, EntityRepository } from "typeorm";
-import { RoleEntity } from "./role.entity";
+import { RoleEntity } from "./entities/role.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { RoleStatus } from "./role-status.enum";
+import { RoleStatus } from "./types/role-status.enum";
 
 @EntityRepository(RoleEntity)
 export class RoleRepositry extends Repository<RoleEntity> {

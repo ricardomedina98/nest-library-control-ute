@@ -1,6 +1,6 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToMany, JoinColumn } from "typeorm";
-import { UserStatus } from "../user/user-status.enum";
-import { UserEntity } from "../user/user.entity";
+import { UserStatus } from "../../user/user-status.enum";
+import { UserEntity } from "../../user/user.entity";
 
 @Entity('roles')
 export class RoleEntity extends BaseEntity {

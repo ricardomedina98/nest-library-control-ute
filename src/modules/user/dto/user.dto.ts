@@ -1,7 +1,4 @@
 import { IsNotEmpty, IsEmail, IsDate, IsString } from "class-validator"
-import { UserDetailsDto } from "./user-details.dto";
-import { RoleType } from "src/modules/role/role-type.enum";
-import { RoleDto } from "src/modules/role/dto/role.dto";
 
 export class UserDto {
     @IsNotEmpty()

@@ -8,7 +8,7 @@ import { ParseNameCreatePipe } from './pipes/pipe-create.touppercase';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from './guards/role.guard';
 import { Roles } from './decorators/role.decorator';
-import { RoleType } from './role-type.enum';
+import { RoleType } from './types/role-type.enum';
 @UseGuards(AuthGuard(), RoleGuard)
 @UsePipes(ValidationPipe)
 @Controller('roles')
