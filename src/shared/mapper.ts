@@ -38,22 +38,6 @@ export const toRoleDto = (data: RoleEntity): RoleDto => {
     return roleDto;
 };
 
-export const toRolesDto = (data: RoleEntity[]): RoleDto[] => {
-
-    let rolesDto: RoleDto[] = data.map(role => {
-
-
-        return {
-            id_role: role.id_role,
-            name: role.name,
-            description: role.description
-        }
-    });
-
-    return rolesDto;
-
-};
-
 
 export const toRolesUsersDto = (data: RoleEntity[]): RoleDto[] => {
 

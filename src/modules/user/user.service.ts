@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException, HttpException, HttpStatus, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ConflictException } from '@nestjs/common';
 import { UserRepositry } from './user.repository';
 import { InjectRepository, } from '@nestjs/typeorm';
 import { UserEntity  } from './user.entity';
@@ -23,7 +23,30 @@ export class UserService {
         private readonly _roleRepository: RoleRepositry
     ) {}
 
+    async getStudents() {
+
+        const role = await this._roleRepository.findOne({
+            where: {
+                name: RoleType.STUDENT
+            }
+        });
+
+        if(!role) {
+            throw new NotFoundException('Role student does not exist');
+        }
+
+        const students = await this._userRepository.find({
+            where: {
+                role,
+                status: UserStatus.ACTIVE
+            }
+        });
+
+        return students.map(student => toUserDto(student));
+    }
+
     async getById(id: number): Promise<UserDto> {
+        
         if(!id) {
             throw new BadRequestException('Id must be sent');
         }

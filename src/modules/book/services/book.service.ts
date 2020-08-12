@@ -30,7 +30,7 @@ export class BookService {
             }
         });
 
-        return toDtoBooks(books);
+        return books.map(book => toDtoBook(book));;
         
     }
 
