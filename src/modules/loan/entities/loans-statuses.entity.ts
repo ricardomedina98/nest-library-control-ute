@@ -5,14 +5,14 @@ import { StatusesLoanEntity } from "./status.entity";
 @Entity('loans-statuses')
 export class LoansStatusesEntity extends BaseEntity {
 
-    @ManyToOne(() => LoanEntity, loan => loan.loanStatuses, { primary: true })
+    @ManyToOne(() => LoanEntity, loan => loan.statuses, { primary: true })
     @JoinColumn({name: 'id_loan'})
     loan: LoanEntity;
 
-    @ManyToOne(() => StatusesLoanEntity, status => status.loanStatuses, { primary: true, eager: true })
+    @ManyToOne(() => StatusesLoanEntity, status => status.statuses, { primary: true })
     @JoinColumn({name: 'id_status'})
     status: StatusesLoanEntity;
 
     @CreateDateColumn({type: 'timestamp', name: 'created_at'})
-    createdAt: Date;
+    createdAt?: Date;
 }

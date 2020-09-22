@@ -4,6 +4,8 @@ import { StatusDto } from "../dto/status/status.dto";
 import { StatusesLoanEntity } from "../entities/status.entity";
 import { toUserDto } from "src/shared/mapper";
 import * as moment from 'moment';
+import { BookDto } from "src/modules/book/dto/book/book.dto";
+import { toDtoBook } from "src/modules/book/mapper/book.mapper";
 
 export const toDtoLoan = (loan: LoanEntity): LoanDto => {
 
@@ -15,22 +17,29 @@ export const toDtoLoan = (loan: LoanEntity): LoanDto => {
         status,
         createdAt,
         updatedAt,
-        books,
         user,
         student,
-        loanStatuses 
+        books,
+        statuses 
     } = loan;
 
     let studentDto = toUserDto(student);
     let userDto = toUserDto(user);
 
-    let statuses: StatusDto[] = loanStatuses.map(loanStatus => {
+    let statusesDto: StatusDto[] = statuses.map(loanStatus => {
         return {
             id_status: loanStatus.status.id_status,
             name: loanStatus.status.name,
             key: loanStatus.status.key,
-            createdAt: loan.createdAt
+            createdAt: loanStatus.createdAt
         }
+    });
+    statusesDto = statusesDto.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+    let booksDto: BookDto[] = books.map(loansBook => {
+        let loansBookDto = toDtoBook(loansBook.book);
+        loansBookDto.isReturn = loansBook.isReturn;
+        return loansBookDto;
     });
 
     const loanDto: LoanDto = {
@@ -42,10 +51,10 @@ export const toDtoLoan = (loan: LoanEntity): LoanDto => {
         status,
         createdAt,
         updatedAt,
-        books,
+        books: booksDto,
         user: userDto,
         student: studentDto,
-        statuses
+        statuses: statusesDto
     } 
 
 

@@ -13,7 +13,7 @@ export class StatusesLoanEntity extends BaseEntity {
     @Column({type: "varchar", nullable: true})
     key: string;
 
-    @OneToMany(() => LoansStatusesEntity, status => status.status, { lazy: true, nullable: false })
-    loanStatuses: LoansStatusesEntity[];
+    @OneToMany(() => LoansStatusesEntity, status => status.status)
+    statuses: LoansStatusesEntity[];
     
 }

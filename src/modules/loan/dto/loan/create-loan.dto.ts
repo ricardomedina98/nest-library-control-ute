@@ -1,4 +1,4 @@
-import { IsNumber, IsDate, IsNotEmpty, IsString, IsOptional, IsArray } from "class-validator";
+import { IsNumber, IsNotEmpty, IsString, IsOptional, IsArray } from "class-validator";
 
 export class CreateLoanDto {
 

@@ -3,6 +3,7 @@ import { BookEntity } from "src/modules/book/entities/book.entity";
 import { UserEntity } from "src/modules/user/user.entity";
 import { LoanStatus } from "../types/loan-status.enum";
 import { LoansStatusesEntity } from "./loans-statuses.entity";
+import { LoansBooksEntity } from "./loans-books.entity";
 
 
 @Entity('loans')
@@ -31,13 +32,6 @@ export class LoanEntity extends BaseEntity {
 
     @CreateDateColumn({type: 'timestamp', name: 'updated_at'})
     updatedAt?: Date;
-    
-    @ManyToMany(() => BookEntity, book => book.id_book, { eager: true, nullable: false })
-    @JoinTable()
-    books: BookEntity[];
-
-    @OneToMany(() => LoansStatusesEntity, loan => loan.loan, { eager: true, nullable: false })
-    loanStatuses: LoansStatusesEntity[];
 
     @ManyToOne(() => UserEntity, user => user.id, { eager: true, nullable: false })
     @JoinColumn({name: 'id_user'})
@@ -46,5 +40,11 @@ export class LoanEntity extends BaseEntity {
     @ManyToOne(() => UserEntity, user => user.id, { eager: true, nullable: false })
     @JoinColumn({name: 'id_student'})
     student: UserEntity;
+
+    @OneToMany(() => LoansStatusesEntity, loan => loan.loan, { nullable: false })
+    statuses: LoansStatusesEntity[];
+
+    @OneToMany(() => LoansBooksEntity, loansBook => loansBook.loan, { nullable: false })
+    books: LoansBooksEntity[];
 
 }

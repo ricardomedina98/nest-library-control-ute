@@ -83,4 +83,8 @@ export class BookDto {
     @IsNotEmpty()
     lenguage: LenguageDto;
 
+    @IsOptional()
+    @IsBoolean()
+    isReturn?: boolean;
+
 }
