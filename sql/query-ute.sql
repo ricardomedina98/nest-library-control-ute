@@ -50,8 +50,7 @@ create table books(
 create table loan(
 	id_loan int auto_increment primary key,
     id_book int not null,
-    id_user int not null,
-    id_student int not null,
+    id_user int not null
     date_loan timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     return_date timestamp null,
     notes text null,

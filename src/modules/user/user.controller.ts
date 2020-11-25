@@ -16,11 +16,16 @@ export class UserController {
         private readonly _userService: UserService
     ) {}
 
+    @Get('students')
+    @Roles(RoleType.MASTER, RoleType.ADMIN)
+    async getStudents(): Promise<UserDto[]> {
+        return await this._userService.getStudents();
+    }
+
     @Get(':id')
     @Roles(RoleType.MASTER)
     async getUser(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
-        const user = await this._userService.getById(id);
-        return user;
+        return await this._userService.getById(id);
     }
 
     

@@ -18,15 +18,15 @@ export class RoleController {
         private readonly _roleService: RoleService
     ) {}
 
+    @Get('/users')
+    async getRolesUsers() {
+        return await this._roleService.getRolesUsers();
+    }
+
     @Get()
     @Roles(RoleType.MASTER)
     async getRoles() {
         return await this._roleService.getAll();
-    }
-
-    @Get('/users')
-    async getRolesUsers() {
-        return await this._roleService.getRolesUsers();
     }
 
     @Get(':id')

@@ -1,6 +1,7 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, BeforeInsert, ManyToMany, JoinTable, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, BeforeInsert, ManyToMany, JoinTable, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { LenguagesEntity } from "./lenguage.entity";
+import { LoansBooksEntity } from "src/modules/loan/entities/loans-books.entity";
 
 
 @Entity('books')
@@ -78,5 +79,8 @@ export class BookEntity extends BaseEntity {
     })
     @JoinColumn({name: 'id_category'})
     category: CategoryEntity;
+
+    @OneToMany(() => LoansBooksEntity, loanBook => loanBook.book)
+    books: LoansBooksEntity[];
 
 }

@@ -4,10 +4,11 @@ import { RoleRepositry } from './role.repository';
 import { RoleDto } from './dto/role.dto';
 import { RoleEntity } from './entities/role.entity';
 import { RoleStatus } from './types/role-status.enum';
-import { toRoleDto, toRolesDto, toRolesUsersDto } from 'src/shared/mapper';
+import { toRoleDto, toRolesUsersDto } from 'src/shared/mapper';
 import { CreateRoleDTO } from './dto/create-role.dto';
 import { UpdateRoleDTO } from './dto/update-role.dto';
 import { UserStatus } from '../user/user-status.enum';
+import { RoleType } from './types/role-type.enum';
 
 @Injectable()
 export class RoleService {
@@ -22,7 +23,7 @@ export class RoleService {
 
         const roles = await this._roleRepository.find({ where: { status: RoleStatus.ACTIVE } });
 
-        return toRolesDto(roles);
+        return roles.map(role => toRoleDto(role));
         
     }
 
