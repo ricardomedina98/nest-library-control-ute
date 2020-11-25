@@ -5,11 +5,13 @@
 ### Create a file .env
 ```sh
     APP_PORT=4000
-    MYSQL_HOST=localhost
+    MYSQL_HOST=127.0.0.1
     MYSQL_USERNAME=root
     MYSQL_PASSWORD=test
     MYSQL_PORT=3306
     MYSQL_DATABASE=library_control_ute
+    JWT_SECRET=library_control_ute2020
+    JWT_EXPIRE_IN=7d
 ```
 
 ### Create file ormconfig.json
